@@ -1037,13 +1037,9 @@ class Client extends EventEmitter {
      * @returns {Promise<Object|null>}
      */
     async getNumberId(number) {
-        if (!number.endsWith('@c.us')) {
-            number += '@c.us';
-        }
-
         return await this.pupPage.evaluate(async number => {
-            const wid = window.Store.WidFactory.createWid(number);
-            const result = await window.Store.QueryExist(wid);
+            if (number.endsWith('@c.us')) number.replace('@c.us','');
+            const result = await window.Store.QueryExist({type: 'phone', phone: number.startsWith('+') ? number : `+${number}`});
             if (!result || result.wid === undefined) return null;
             return result.wid;
         }, number);
