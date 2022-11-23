@@ -1039,7 +1039,7 @@ class Client extends EventEmitter {
     async getNumberId(number) {
         return await this.pupPage.evaluate(async number => {
             if (number.endsWith('@c.us')) number.replace('@c.us','');
-            const result = await window.Store.QueryExist({type: 'phone', phone: number.startsWith('+') ? number : `+${number}`});
+            const result = await window.Store.QueryExist('phone', number.startsWith('+') ? number : `+${number}`);
             if (!result || result.wid === undefined) return null;
             return result.wid;
         }, number);
